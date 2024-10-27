@@ -1,0 +1,144 @@
+- name: Configure servers
+  hosts: localhost
+  tasks:
+  - name: Write apt configuration
+    ansible.builtin.copy:
+      src: etc/apt/sources.list
+      dest: /etc/apt/sources.list
+      owner: root
+      mode: 0644
+  - name: Update & upgrade
+    ansible.builtin.apt:
+      update_cache: true
+      upgrade: dist
+  - name: Install updated kernel from stable-backports
+    ansible.builtin.apt:
+      package: linux-image-amd64
+      default_release: stable-backports
+  - name: Install dnsmasq
+    ansible.builtin.apt:
+      package: dnsmasq
+  - name: Write dnsmasq configuration
+    block:
+    - name: Write main dnsmasq configuration
+      ansible.builtin.copy:
+        src: etc/dnsmasq.conf
+        dest: /etc/dnsmasq.conf
+        owner: root
+        mode: 0644
+    - name: Create /etc/dnsmasq directory
+      ansible.builtin.file:
+        path: /etc/dnsmasq
+        state: directory
+    - name: Write upstream dnsmasq configuration
+      ansible.builtin.copy:
+        src: etc/dnsmasq/upstream.conf
+        dest: /etc/dnsmasq/upstream.conf
+        owner: root
+        mode: 0644
+  - name: Enable dnsmasq
+    ansible.builtin.service:
+      name: dnsmasq
+      state: restarted
+      enabled: true
+  - name: Write resolv.conf
+    ansible.builtin.copy:
+      src: etc/resolv.conf
+      dest: /etc/resolv.conf
+      owner: root
+      mode: 0644
+      attr: +i
+  - name: Write hosts
+    ansible.builtin.copy:
+      src: etc/hosts
+      dest: /etc/hosts
+      owner: root
+      mode: 0644
+  - name: Enable IPv4 forwarding
+    ansible.posix.sysctl:
+      name: net.ipv4.ip_forward
+      value: 1
+      sysctl_file: /etc/sysctl.d/10-ip.conf
+  - name: Install nftables
+    ansible.builtin.apt:
+      package: nftables
+  - name: Write nftables configuration
+    block:
+    - name: Write main nftables configuration
+      ansible.builtin.copy:
+        src: etc/nftables.conf
+        dest: /etc/nftables.conf
+        owner: root
+        mode: 0644
+    - name: Create /etc/nftables.d directory
+      ansible.builtin.file:
+        path: /etc/nftables.d
+        state: directory
+    - name: Write nftables configuration
+      ansible.builtin.copy:
+        src: etc/nftables.d/
+        dest: /etc/nftables.d
+        owner: root
+        mode: 0644
+  - name: Enable nftables
+    ansible.builtin.service:
+      name: nftables
+      state: restarted
+      enabled: true
+  - name: Install Cockpit
+    ansible.builtin.apt:
+      package: cockpit
+      default_release: stable-backports
+      install_recommends: false
+  - name: Write Cockpit disallowed-users configuration
+    ansible.builtin.copy:
+      src: etc/cockpit/disallowed-users
+      dest: /etc/cockpit/disallowed-users
+      owner: root
+      mode: 0644
+  - name: Enable Cockpit
+    ansible.builtin.service:
+      name: cockpit.socket
+      state: restarted
+      enabled: true
+  - name: Install lxc
+    ansible.builtin.apt:
+      package: lxc
+  - name: Disable lxc-net
+    ansible.builtin.systemd_service:
+      name: lxc-net
+      state: stopped
+      enabled: false
+      masked: true
+  - name: Write lxc configuration
+    block:
+    - name: Write lxc system configuration
+      ansible.builtin.copy:
+        src: etc/lxc/lxc.conf
+        dest: /etc/lxc/lxc.conf
+        owner: root
+        mode: 0644
+    - name: Write lxc container default configuration
+      ansible.builtin.copy:
+        src: etc/lxc/default.conf
+        dest: /etc/lxc/default.conf
+        owner: root
+        mode: 0644
+  - name: Install bridge-utils
+    ansible.builtin.apt:
+      package: bridge-utils
+  - name: Write network interfaces configuration
+    block:
+    - name: Create /etc/network/interfaces.d directory
+      ansible.builtin.file:
+        path: /etc/network/interfaces.d
+        state: directory
+    - name: Write network interfaces configuration
+      ansible.builtin.copy:
+        src: etc/network/interfaces.d/
+        dest: /etc/network/interfaces.d
+        owner: root
+        mode: 0644
+  - name: Reload network interfaces
+    ansible.builtin.command:
+      cmd: ifup -a
