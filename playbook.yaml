@@ -26,14 +26,14 @@
         dest: /etc/dnsmasq.conf
         owner: root
         mode: 0644
-    - name: Create /etc/dnsmasq directory
+    - name: Create /etc/dnsmasq.d directory
       ansible.builtin.file:
-        path: /etc/dnsmasq
+        path: /etc/dnsmasq.d
         state: directory
-    - name: Write upstream dnsmasq configuration
+    - name: Write dnsmasq configuration
       ansible.builtin.copy:
-        src: etc/dnsmasq/upstream.conf
-        dest: /etc/dnsmasq/upstream.conf
+        src: etc/dnsmasq.d/
+        dest: /etc/dnsmasq.d
         owner: root
         mode: 0644
   - name: Enable dnsmasq
@@ -142,3 +142,5 @@
   - name: Reload network interfaces
     ansible.builtin.command:
       cmd: ifup -a
+
+# TODO: support modular dnsmasq configs,include host specific enp3s0 config
