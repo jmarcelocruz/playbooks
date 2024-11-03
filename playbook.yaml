@@ -3,7 +3,7 @@
   tasks:
   - name: Write apt configuration
     ansible.builtin.copy:
-      src: etc/apt/sources.list
+      src: common/etc/apt/sources.list
       dest: /etc/apt/sources.list
       owner: root
       mode: 0644
@@ -22,7 +22,7 @@
     block:
     - name: Write main dnsmasq configuration
       ansible.builtin.copy:
-        src: etc/dnsmasq.conf
+        src: common/etc/dnsmasq.conf
         dest: /etc/dnsmasq.conf
         owner: root
         mode: 0644
@@ -32,7 +32,7 @@
         state: directory
     - name: Write dnsmasq configuration
       ansible.builtin.copy:
-        src: etc/dnsmasq.d/
+        src: common/etc/dnsmasq.d/
         dest: /etc/dnsmasq.d
         owner: root
         mode: 0644
@@ -43,14 +43,14 @@
       enabled: true
   - name: Write resolv.conf
     ansible.builtin.copy:
-      src: etc/resolv.conf
+      src: common/etc/resolv.conf
       dest: /etc/resolv.conf
       owner: root
       mode: 0644
       attr: +i
   - name: Write hosts
     ansible.builtin.copy:
-      src: etc/hosts
+      src: common/etc/hosts
       dest: /etc/hosts
       owner: root
       mode: 0644
@@ -66,7 +66,7 @@
     block:
     - name: Write main nftables configuration
       ansible.builtin.copy:
-        src: etc/nftables.conf
+        src: common/etc/nftables.conf
         dest: /etc/nftables.conf
         owner: root
         mode: 0644
@@ -76,7 +76,7 @@
         state: directory
     - name: Write nftables configuration
       ansible.builtin.copy:
-        src: etc/nftables.d/
+        src: common/etc/nftables.d/
         dest: /etc/nftables.d
         owner: root
         mode: 0644
@@ -92,7 +92,7 @@
       install_recommends: false
   - name: Write Cockpit disallowed-users configuration
     ansible.builtin.copy:
-      src: etc/cockpit/disallowed-users
+      src: common/etc/cockpit/disallowed-users
       dest: /etc/cockpit/disallowed-users
       owner: root
       mode: 0644
@@ -114,13 +114,13 @@
     block:
     - name: Write lxc system configuration
       ansible.builtin.copy:
-        src: etc/lxc/lxc.conf
+        src: common/etc/lxc/lxc.conf
         dest: /etc/lxc/lxc.conf
         owner: root
         mode: 0644
     - name: Write lxc container default configuration
       ansible.builtin.copy:
-        src: etc/lxc/default.conf
+        src: common/etc/lxc/default.conf
         dest: /etc/lxc/default.conf
         owner: root
         mode: 0644
@@ -135,7 +135,7 @@
         state: directory
     - name: Write network interfaces configuration
       ansible.builtin.copy:
-        src: etc/network/interfaces.d/
+        src: common/etc/network/interfaces.d/
         dest: /etc/network/interfaces.d
         owner: root
         mode: 0644
