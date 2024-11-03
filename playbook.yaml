@@ -1,5 +1,5 @@
 - name: Configure servers
-  hosts: localhost
+  hosts: all
   tasks:
   - name: Write apt configuration
     ansible.builtin.copy:
@@ -32,10 +32,11 @@
         state: directory
     - name: Write dnsmasq configuration
       ansible.builtin.copy:
-        src: common/etc/dnsmasq.d/
+        src: "{{ item }}"
         dest: /etc/dnsmasq.d
         owner: root
         mode: 0644
+      loop: "{{ query('fileglob', 'common/etc/dnsmasq.d/*', '{{ inventory_hostname }}/etc/dnsmasq.d/*')}}"
   - name: Enable dnsmasq
     ansible.builtin.service:
       name: dnsmasq
@@ -139,8 +140,9 @@
         dest: /etc/network/interfaces.d
         owner: root
         mode: 0644
+      loop: "{{ query('fileglob', 'common/etc/network/interfaces.d/*', '{{ inventory_hostname }}/etc/network/interfaces.d/*')}}"
   - name: Reload network interfaces
     ansible.builtin.command:
       cmd: ifup -a
 
-# TODO: support modular dnsmasq configs,include host specific enp3s0 config
+# TODO: support host specific files
