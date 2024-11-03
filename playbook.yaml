@@ -144,5 +144,3 @@
   - name: Reload network interfaces
     ansible.builtin.command:
       cmd: ifup -a
-
-# TODO: support host specific files
