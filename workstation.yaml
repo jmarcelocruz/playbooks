@@ -61,5 +61,7 @@
       package:
       - code
       - firefox
+      - git
+      - git-lfs
       - spotify-client
       - steam-installer
