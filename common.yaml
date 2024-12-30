@@ -1,0 +1,17 @@
+- name: Write apt configuration
+  become: true
+  ansible.builtin.copy:
+    src: common/etc/apt/sources.list
+    dest: /etc/apt/sources.list
+    owner: root
+    mode: 0644
+- name: Update & upgrade
+  become: true
+  ansible.builtin.apt:
+    update_cache: true
+    upgrade: dist
+- name: Install updated kernel from stable-backports
+  become: true
+  ansible.builtin.apt:
+    package: linux-image-amd64
+    default_release: stable-backports

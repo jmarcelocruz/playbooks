@@ -1,20 +1,7 @@
 - name: Configure servers
   hosts: all
   tasks:
-  - name: Write apt configuration
-    ansible.builtin.copy:
-      src: common/etc/apt/sources.list
-      dest: /etc/apt/sources.list
-      owner: root
-      mode: 0644
-  - name: Update & upgrade
-    ansible.builtin.apt:
-      update_cache: true
-      upgrade: dist
-  - name: Install updated kernel from stable-backports
-    ansible.builtin.apt:
-      package: linux-image-amd64
-      default_release: stable-backports
+  - import_tasks: common.yaml
   - name: Install dnsmasq
     ansible.builtin.apt:
       package: dnsmasq
