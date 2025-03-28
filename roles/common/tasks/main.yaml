@@ -1,6 +1,6 @@
 - name: Deploy base apt configuration
   ansible.builtin.copy:
-    src: etc/apt
+    src: etc/apt/sources.list
     dest: /etc/apt
     owner: root
     group: root
