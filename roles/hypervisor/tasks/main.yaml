@@ -75,6 +75,12 @@
     package: cockpit
     default_release: stable-backports
     install_recommends: false
+- name: Install Cockpit add-ons
+  ansible.builtin.apt:
+    package:
+    - cockpit-networkmanager
+    - cockpit-storaged
+    default_release: stable-backports
 - name: Write Cockpit disallowed-users configuration
   ansible.builtin.copy:
     src: etc/cockpit/disallowed-users
