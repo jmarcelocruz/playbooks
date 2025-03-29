@@ -47,7 +47,12 @@
   ansible.builtin.apt:
     package:
     - firefox-esr
+    purge: true
     state: absent
+- name: Autoremove left-over dependencies
+  ansible.builtin.apt:
+    autoremove: true
+    purge: true
 - name: Install apps
   ansible.builtin.apt:
     package:
