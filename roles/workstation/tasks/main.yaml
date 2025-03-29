@@ -47,6 +47,7 @@
   ansible.builtin.apt:
     package:
     - firefox-esr
+    - gnome-games
     purge: true
     state: absent
 - name: Autoremove left-over dependencies
