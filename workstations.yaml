@@ -1,0 +1,6 @@
+- name: Configure workstations
+  hosts: workstations
+  become: true
+  roles:
+  - common
+  - workstation
